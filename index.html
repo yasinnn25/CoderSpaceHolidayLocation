@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Page Design</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .slider {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        position: relative;
+      }
+      .slider .carousel-item {
+        height: 100vh;
+      }
+      .slider .carousel-item img {
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+      }
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+        z-index: 1;
+      }
+      .overlay h2 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+      }
+      .btn-explore {
+        border: 2px solid #6fdce3;
+        color: #6fdce3;
+        padding: 10px 50px;
+        font-size: 1.2rem;
+        transition: background-color 0.3s, color 0.3s;
+        bottom: 9rem;
+        position: absolute;
+      }
+      .btn-explore:hover {
+        background-color: #6fdce3;
+        color: white;
+      }
+      .btn-explore.wobble {
+        animation: wobble 2s infinite;
+      }
+      @keyframes wobble {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        50% {
+          transform: translateX(5px);
+        }
+        75% {
+          transform: translateX(-5px);
+        }
+      }
+      .intro-section {
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+      }
+      .intro-section {
+        font-size: 1.2rem;
+        color: #333;
+        line-height: 1.6;
+        padding: 40px;
+      }
+      .intro-image {
+        max-width: 50%;
+        height: auto;
+        margin-left: 20px;
+        border-radius: 20px 0px 0px 20px;
+      }
+      .card-container {
+        display: none;
+        transform: translateY(20px);
+        transition: all 0.5s ease-out;
+      }
+      .card-container.show {
+        display: inline-block;
+        transform: translateY(0);
+      }
+      .category-card img {
+        width: 100%;
+        height: 200px; /* Fixed height for uniform size */
+        object-fit: cover;
+        border-radius: 5px;
+        transition: transform 0.3s;
+      }
+      .category-card:hover img {
+        transform: scale(1.05);
+      }
+      .category-card .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .category-card:hover .overlay {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+      .category-card .overlay h5 {
+        color: white;
+        font-size: 1.5rem;
+      }
+      .detail-card .card {
+        margin-bottom: 20px;
+      }
+      .detail-card .card img {
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px 5px 0 0;
+      }
+      .detail-card .card .btn {
+        background-color: #6fdce3;
+        color: white;
+        width: 100%;
+        border: none;
+        border-radius: 0 0 5px 5px;
+      }
+      .detail-card .card .btn:hover {
+        background-color: #5bc2d1;
+      }
+      .modal-dialog-centered {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100% - 1rem);
+      }
+
+      .modal-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        max-width: 80vw;
+        min-height: 50vh;
+        padding: 0; /* Remove any padding */
+      }
+      .title-category {
+        letter-spacing: 0.4rem;
+        color: #80c4e9;
+      }
+      .modal-body {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 0; /* Remove any padding */
+      }
+      .modal-body img {
+        width: 50%;
+        min-height: 50vh;
+        object-position: center;
+        object-fit: cover;
+        contain: size;
+      }
+      .modal-body .modal-text {
+        width: 50%;
+        padding: 20px;
+        margin-top: -200px;
+      }
+      .modal-title {
+        color: #218cc5;
+      }
+      .todo-list-container {
+        background-color: #70d6ff;
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px;
+        color: #218cc5 !important;
+      }
+      .todo-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid black;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+      }
+      .todo-list-header h3 {
+        margin: 0;
+      }
+      .icon-color {
+        color: #218cc5;
+      }
+      .btn-modal {
+        background-color: #218cc5;
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        padding: 5px 15px 5px 15px;
+        outline-offset: 0;
+      }
+      .btn-modal:hover {
+        opacity: 0.9;
+      }
+
+      .todo-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid black;
+      }
+      .todo-list-item:last-child {
+        border-bottom: none;
+      }
+      .todo-list-item button {
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+      }
+      .footer {
+        margin-top: 20rem;
+        text-align: center;
+        padding: 20px 0;
+        background: #6fdce3;
+        color: white;
+      }
+      .table-color {
+        color: #218cc5;
+      }
+      .name-sp {
+        letter-spacing: 0.08rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="carouselExampleIndicators"
+      class="carousel slide slider"
+      data-ride="carousel"
+    >
+      <div class="overlay">
+        <h2>Türkiyenin incisi Antalya</h2>
+        <button class="btn btn-explore wobble" onclick="scrollToContent()">
+          Keşfet
+        </button>
+      </div>
+      <ol class="carousel-indicators">
+        <li
+          data-target="#carouselExampleIndicators"
+          data-slide-to="0"
+          class="active"
+        ></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img
+            src="https://www.bizevdeyokuz.com/wp-content/uploads/antalya-kaleici-limani.jpg"
+            class="d-block w-100"
+            alt="Antalya Kaleiçi Limanı"
+          />
+        </div>
+        <div class="carousel-item">
+          <img
+            src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/b2/d3/17/duden-waterfalls.jpg?w=1500&h=1200&s=1"
+            class="d-block w-100"
+            alt="Düden Waterfalls"
+          />
+        </div>
+        <div class="carousel-item">
+          <img
+            src="https://www.rumbatur.com/source/Turlar/olimpos/olimpos%203.jpg"
+            class="d-block w-100"
+            alt="Olimpos"
+          />
+        </div>
+        <div class="carousel-item">
+          <img
+            src="https://pergedogaevleri.com/wp-content/uploads/2023/08/side-antik-kenti.jpg"
+            class="d-block w-100"
+            alt="Side Antik Kenti"
+          />
+        </div>
+      </div>
+      <a
+        class="carousel-control-prev"
+        href="#carouselExampleIndicators"
+        role="button"
+        data-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a
+        class="carousel-control-next"
+        href="#carouselExampleIndicators"
+        role="button"
+        data-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+
+    <div class="intro-section">
+      <div>
+        <h3 class="modal-title mb-3">AKDENİZİN İNCİSİ ANTALYA</h3>
+        <p>
+          Her yıl milyonlarca yerli ve yabancı ziyaretçiye ev sahipliği yapan
+          Antalya Türkiye’nin en önemli turizm şehrinden biri olarak karşımıza
+          çıkıyor. Mavi bayraklı masmavi plajları, her yaşam stiline ve
+          bütçesine uygun otelleri, devasa tatil köyleri, uluslararası golf
+          sahaları ve paha biçilmez tarihi hazineleriyle Antalya, keşfedilecek
+          pek çok güzelliğe ev sahipliği yapıyor. Hakim olduğu ılıman iklim
+          sebebi ile uzun bir deniz sezonuna sahip Antalya Toros Dağları’nın
+          yemyeşil ormanlarını Akdeniz'in tertemiz sularıyla buluşturan bir
+          tatil cenneti.
+        </p>
+      </div>
+      <img
+        src="https://www.alanyapostasi.com.tr/wp-content/uploads/2024/05/b7a4f405-city-1669-1545e127438.jpg"
+        alt="Antalya"
+        class="intro-image"
+      />
+    </div>
+    <div class="container mt-5">
+      <h1 class="border-bottom pb-2 mb-3 title-category">Kategori seçiniz</h1>
+      <div class="row category-card">
+        <div class="col-md-4">
+          <div class="card" onclick="showCategory('tarihiYerler')">
+            <img
+              src="https://cdn2.enuygun.com/media/lib/825x620/uploads/image/aspendos-tiyatrosu-34372.webp"
+              alt="Tarihi Yerler"
+            />
+            <div class="overlay">
+              <h5>Tarihi Yerler</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card" onclick="showCategory('plajlar')">
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFZvyyEfKmXWwohTgevuUre2b_t_-CMZzRcw&s"
+              alt="Plajlar"
+            />
+            <div class="overlay">
+              <h5>Plajlar</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card" onclick="showCategory('dogalGuzellikler')">
+            <img
+              src="https://cdn.hellovillam.com/HelloVillam/images/w596/2022-02/manavgat-selalesi_T88W18BNL8FWQZ33ZA049FPXTV0W4U.jpg"
+              alt="Doğal Güzellikler"
+            />
+            <div class="overlay">
+              <h5>Doğal Güzellikler</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row detail-card mt-5" id="detail-cards">
+        <div id="tarihiYerler" class="col-12 card-container">
+          <h2 class="modal-title">Tarihi Yerler</h2>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://cdn.hellovillam.com/HelloVillam/images/w596/2021-11/xanthos-antik-kenti_C63WVIHJRHNEYSFV1W98GYB75QVAR2.jpg"
+                  class="card-img-top"
+                  alt="Xanthos Antik Kenti"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Xanthos Antik Kenti</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Xanthos Antik Kenti', 'Xanthos Antik Kenti, Antalya’da yer alan Likya Birliği’nin başkenti olan antik bir şehirdir.','https://cdn.hellovillam.com/HelloVillam/images/w596/2021-11/xanthos-antik-kenti_C63WVIHJRHNEYSFV1W98GYB75QVAR2.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14c02d2b00000001:0xd4c7a08ac6d7da01?sa=X&ved=1t:8290&ictx=111')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_1191307675-2.02.2021191822.jpg"
+                  class="card-img-top"
+                  alt="Alanya Kalesi"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Alanya Kalesi</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Alanya Kalesi', 'Alanya Kalesi, Alanya’da bulunan tarihi bir kaledir.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_1191307675-2.02.2021191822.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14dca2a0f0e7d05d:0x5bb326b7485c7539?sa=X&ved=1t:8290&ictx=111')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_135487028-2.02.2021191823.jpg"
+                  class="card-img-top"
+                  alt="Apollon Tapınağı"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Apollon Tapınağı</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Apollon Tapınağı', 'Apollon Tapınağı, Side’de bulunan tarihi bir tapınaktır.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_135487028-2.02.2021191823.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14be812f666d0f35:0xc46d79d017ddd1ab?sa=X&ved=1t:8290&ictx=111')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://www.kulturportali.gov.tr/contents/images/20180906154414672_side%20logolu.jpg"
+                  class="card-img-top"
+                  alt="Side Antik Kenti"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Side Antik Kenti</h5>
+                  <button
+                class="btn"
+                data-toggle="modal"
+                data-target="#detailsModal"
+                onclick="showModal('Side Antik Kenti', 'svsfdbvfbs','https://www.kulturportali.gov.tr/contents/images/20180906154414672_side%20logolu.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14c35bd71444288d:0xaf9cf5d1d8c7cfd0?sa=X&ved=1t:8290&ictx=111')">
+                        Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://www.kulturportali.gov.tr/repoKulturPortali/large/SehirRehberi//GezilecekYer/20170222140550794_Olympos%20Guney%20Kent%20rihtim%20duvari.JPG?format=jpg&quality=50"
+                  class="card-img-top"
+                  alt="Olympos Antik Kenti"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Olympos Antik Kenti</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Olympos Antik Kenti', 'Olympos Antik Kenti, Antalya’da bulunan tarihi bir antik kenttir.','https://www.kulturportali.gov.tr/repoKulturPortali/large/SehirRehberi//GezilecekYer/20170222140550794_Olympos%20Guney%20Kent%20rihtim%20duvari.JPG?format=jpg&quality=50','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14c2368ef0f18791:0x870a162e401eaf00?sa=X&ved=1t:8290&ictx=111')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_168669245-2.02.2021191825.jpg"
+                  class="card-img-top"
+                  alt="Perge Antik Kenti"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Perge Antik Kenti</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Perge Antik Kenti', 'Perge Antik Kenti, Antalya’da bulunan tarihi bir antik kenttir.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_168669245-2.02.2021191825.jpg','https://maps.google.com/maps?hl=tr&gl=tr&um=1&ie=UTF-8&fb=1&sa=X&ftid=0x14c381a96a370743:0xc68467e8d8ebb407')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://www.arkeogezgin.com/wp-content/uploads/2017/08/s-fb82d1eec5bd48ad205be44881f2057a781e43a5.jpg"
+                  class="card-img-top"
+                  alt="St. Nicholas Kilisesi"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">St. Nicholas Kilisesi</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('St. Nicholas Kilisesi', 'St. Nicholas Kilisesi, Antalya’da bulunan tarihi bir kilisedir.','https://www.arkeogezgin.com/wp-content/uploads/2017/08/s-fb82d1eec5bd48ad205be44881f2057a781e43a5.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14c1f20daaaaaaab:0xdad8c9d69a8675e9?sa=X&ved=1t:8290&ictx=111')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_631658699-2.02.2021191833.jpg"
+                  class="card-img-top"
+                  alt="Kızıl Kule"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Kızıl Kule</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Kızıl Kule', 'Kızıl Kule, Alanya’da bulunan tarihi bir kuledir.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_631658699-2.02.2021191833.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14dc9874745f2295:0x318980d2f1468f07?sa=X&ved=1t:8290&ictx=111')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+  <div class="card">
+    <img
+      src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_542440027-2.02.2021191837.jpg"
+      class="card-img-top"
+      alt="Aspendos Antik Tiyatrosu"
+    />
+    <div class="card-body">
+      <h5 class="card-title">Aspendos Antik Tiyatrosu</h5>
+      <button
+        class="btn"
+        data-toggle="modal"
+        data-target="#detailsModal"
+        onclick="showModal('Aspendos Antik Tiyatrosu', 'Aspendos Antik Tiyatrosu, Antalya’da bulunan tarihi bir antik tiyatrodur.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_542440027-2.02.2021191837.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14c49e7638f76edd:0x82aaad9ddfd636b6?sa=X&ved=1t:8290&ictx=111')"
+      >
+        Detay
+      </button>
+    </div>
+  </div>
+</div>
+<div class="col-md-4">
+  <div class="card">
+    <img
+      src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_542440027-2.02.2021191837.jpg"
+      class="card-img-top"
+      alt="Aspendos Antik Tiyatrosu"
+    />
+    <div class="card-body">
+      <h5 class="card-title">Aspendos Antik Tiyatrosu</h5>
+      <button
+        class="btn"
+        data-toggle="modal"
+        data-target="#detailsModal"
+        onclick="showModal('Aspendos Antik Tiyatrosu', 'Aspendos Antik Tiyatrosu, Antalya’da bulunan tarihi bir antik tiyatrodur.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_542440027-2.02.2021191837.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14c49e7638f76edd:0x82aaad9ddfd636b6?sa=X&ved=1t:8290&ictx=111')"
+      >
+        Detay
+      </button>
+    </div>
+    </div>
+    </div>
+          </div>
+        </div>
+        <div id="plajlar" class="col-12 card-container">
+          <h2 class="modal-title">Plajlar</h2>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_1415192465-2.02.2021231956.jpg"
+                  class="card-img-top"
+                  alt="Kleopatra Plajı"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Kleopatra Plajı</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Kleopatra Plajı', 'Kleopatra Plajı, Alanya’da bulunan ünlü bir plajdır.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_1415192465-2.02.2021231956.jpg','https://www.google.com.tr/maps/place/Kleopatra+Plaj%C4%B1/@36.5493962,31.9656494,15z/data=!4m6!3m5!1s0x14dca28dce2293b1:0xce799f4c98975276!8m2!3d36.5533266!4d31.9728367!16s%2Fg%2F11hcth5h8_?hl=tr&entry=ttu')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_1150516892-2.02.2021231957.jpg"
+                  class="card-img-top"
+                  alt="Kaputaş Plajı"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Kaputaş Plajı</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Kaputaş Plajı', 'Kaputaş Plajı, Antalya’da bulunan ünlü bir plajdır.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_1150516892-2.02.2021231957.jpg','https://www.google.com.tr/maps/place/Kaputa%C5%9F+Plaj%C4%B1/@36.2289726,29.4386392,15z/data=!3m1!4b1!4m6!3m5!1s0x14c1d37060c20369:0xb0509cbcd714c4d5!8m2!3d36.2289562!4d29.448939!16s%2Fm%2F02rfkdt?hl=tr&entry=ttu')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_646135198-2.02.2021231959.jpg"
+                  class="card-img-top"
+                  alt="Konyaaltı Halk Plajı"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Konyaaltı Halk Plajı</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Konyaaltı Halk Plajı', 'Konyaaltı Halk Plajı, Antalya’da bulunan ünlü bir plajdır.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_646135198-2.02.2021231959.jpg','https://maps.google.com/maps?hl=tr&gl=tr&um=1&ie=UTF-8&fb=1&sa=X&ftid=0x14c391a64790992d:0xffbe19a50dfb8107')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_103659710-2.02.2021232001.jpg"
+                  class="card-img-top"
+                  alt="Phaselis Koyu"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Phaselis Koyu</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Phaselis Koyu', 'Phaselis Koyu, Antalya’da bulunan ünlü bir koydur.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_103659710-2.02.2021232001.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14c3b59535dd62cb:0x42ca36b1b41e3a52?sa=X&ved=1t:8290&ictx=111')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_661149388-2.02.2021232003.jpg"
+                  class="card-img-top"
+                  alt="Olimpos Plajı"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Olimpos Plajı</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Olimpos Plajı', 'Olimpos Plajı, Antalya’da bulunan ünlü bir plajdır.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_661149388-2.02.2021232003.jpg','https://www.google.com.tr/maps/place/Olimpos+Plaj%C4%B1/@36.4093952,30.4702998,15z/data=!3m1!4b1!4m6!3m5!1s0x14c23688d5941d43:0x67f6609d433d9788!8m2!3d36.4093789!4d30.4805996!16s%2Fg%2F11cjht6spd?hl=tr&entry=ttu')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_417354505-2.02.2021232005.jpg"
+                  class="card-img-top"
+                  alt="Patara Plajı"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Patara Plajı</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Patara Plajı', 'Patara Plajı, Antalya’da bulunan ünlü bir plajdır.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_417354505-2.02.2021232005.jpg','https://www.google.com.tr/maps/place/Patara+Plaj%C4%B1/@36.2708057,29.2484478,13z/data=!3m1!4b1!4m6!3m5!1s0x14c02eb47665e4bb:0x4169731f7fd12fd!8m2!3d36.2753567!4d29.2843598!16zL20vMDhsaGZ5?hl=tr&entry=ttu')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+  <div class="card">
+    <img
+      src="https://cdn2.enuygun.com/media/lib/825x620/uploads/image/inciralti-49828.webp"
+      class="card-img-top"
+      alt="İnciraltı Halk Plajı"
+    />
+    <div class="card-body">
+      <h5 class="card-title">İnciraltı Halk Plajı</h5>
+      <button
+        class="btn"
+        data-toggle="modal"
+        data-target="#detailsModal"
+        onclick="showModal('İnciraltı Halk Plajı', 'İnciraltı Halk Plajı, Antalya’da bulunan ünlü bir halk plajıdır.','https://cdn2.enuygun.com/media/lib/825x620/uploads/image/inciralti-49828.webp','https://www.google.com.tr/maps/place/Muratpa%C5%9Fa+Belediyesi+Antalya+%C4%B0nciralt%C4%B1+Plaj%C4%B1/@36.859874,30.6077109,12z/data=!4m10!1m2!2m1!1sinciralt%C4%B1+halk+plaj%C4%B1+antalya!3m6!1s0x14c39a9156a08579:0x3b7a4296d57c7645!8m2!3d36.859874!4d30.7289644!15sCh5pbmNpcmFsdMSxIGhhbGsgcGxhasSxIGFudGFseWFaICIeaW5jaXJhbHTEsSBoYWxrIHBsYWrEsSBhbnRhbHlhkgEFYmVhY2iaASRDaGREU1VoTk1HOW5TMFZKUTBGblNVUlBYMkpUTFdoQlJSQULgAQA!16s%2Fg%2F11c4bcpf6_?hl=tr&entry=ttu')"
+      >
+        Detay
+      </button>
+    </div>
+  </div>
+</div>
+<div class="col-md-4">
+  <div class="card">
+    <img
+      src="https://cdn2.enuygun.com/media/lib/825x620/uploads/image/inciralti-49828.webp"
+      class="card-img-top"
+      alt="İnciraltı Halk Plajı"
+    />
+    <div class="card-body">
+      <h5 class="card-title">İnciraltı Halk Plajı</h5>
+      <button
+        class="btn"
+        data-toggle="modal"
+        data-target="#detailsModal"
+        onclick="showModal('İnciraltı Halk Plajı', 'İnciraltı Halk Plajı, Antalya’da bulunan ünlü bir halk plajıdır.','https://cdn2.enuygun.com/media/lib/825x620/uploads/image/inciralti-49828.webp','https://www.google.com.tr/maps/place/Muratpa%C5%9Fa+Belediyesi+Antalya+%C4%B0nciralt%C4%B1+Plaj%C4%B1/@36.859874,30.6077109,12z/data=!4m10!1m2!2m1!1sinciralt%C4%B1+halk+plaj%C4%B1+antalya!3m6!1s0x14c39a9156a08579:0x3b7a4296d57c7645!8m2!3d36.859874!4d30.7289644!15sCh5pbmNpcmFsdMSxIGhhbGsgcGxhasSxIGFudGFseWFaICIeaW5jaXJhbHTEsSBoYWxrIHBsYWrEsSBhbnRhbHlhkgEFYmVhY2iaASRDaGREU1VoTk1HOW5TMFZKUTBGblNVUlBYMkpUTFdoQlJSQULgAQA!16s%2Fg%2F11c4bcpf6_?hl=tr&entry=ttu')"
+      >
+        Detay
+      </button>
+    </div>
+  </div>
+</div>
+<div class="col-md-4">
+  <div class="card">
+    <img
+      src="https://cdn2.enuygun.com/media/lib/825x620/uploads/image/adrasan-plaji-49830.webp"
+      class="card-img-top"
+      alt="Adrasan Plajı"
+    />
+            <div class="card-body">
+              <h5 class="card-title">Adrasan Plajı</h5>
+              <button
+                class="btn"
+                data-toggle="modal"
+                data-target="#detailsModal"
+                onclick="showModal('Adrasan Plajı', 'Adrasan Plajı, Antalya’da bulunan ünlü bir plajdır.','https://cdn2.enuygun.com/media/lib/825x620/uploads/image/adrasan-plaji-49830.webp','https://www.google.com.tr/maps/place/Mavi+plaj/@36.3085992,30.4602995,17z/data=!3m1!4b1!4m6!3m5!1s0x14c239b94bd9a9df:0xde54b40a057c7394!8m2!3d36.308595!4d30.4649129!16s%2Fg%2F113hypcst?hl=tr&entry=ttu')"
+              >
+                Detay
+              </button>
+            </div>
+          </div>
+        </div>
+
+        </div>
+        </div>
+        <div id="dogalGuzellikler" class="col-12 card-container">
+          <h2 class="modal-title">Doğal Güzellikler</h2>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card">
+                <img
+                  src="https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_1384849046-2.02.2021182519.jpg"
+                  class="card-img-top"
+                  alt="Manavgat Şelalesi"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Manavgat Şelalesi</h5>
+                  <button
+                    class="btn"
+                    data-toggle="modal"
+                    data-target="#detailsModal"
+                    onclick="showModal('Manavgat Şelalesi', 'Manavgat Şelalesi, Antalya’da bulunan ünlü bir şelaledir.','https://resim.gezinomi.com/assets/customhtmleditor/shutterstock_1384849046-2.02.2021182519.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14c35709367f1dd1:0x7b6765df94fc38ac?sa=X&ved=1t:8290&ictx=111')"
+                  >
+                    Detay
+                  </button>
+                </div>
+              </div>
+            </div>      
+            <div class="col-md-4">
+              <div class="card">
+                  <img
+                      src="https://cdnblog.tatilbudur.com/wp-content/uploads/2023/05/2-4-768x512.jpg"
+                      class="card-img-top"
+                      alt="Sapadere Kanyonu"
+                  />
+                  <div class="card-body">
+                      <h5 class="card-title">Sapadere Kanyonu</h5>
+                      <button
+                          class="btn"
+                          data-toggle="modal"
+                          data-target="#detailsModal"
+                          onclick="showModal('Sapadere Kanyonu', 'Sapadere Kanyonu, Antalya’da bulunan ünlü bir kanyondur.','https://cdnblog.tatilbudur.com/wp-content/uploads/2023/05/2-4-768x512.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14dc81325502c0b1:0xd02d26afb0329bf8?sa=X&ved=1t:8290&ictx=111')"
+                      >
+                          Detay
+                      </button>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card">
+                <img
+                    src="https://cdnblog.tatilbudur.com/wp-content/uploads/2023/05/2-6-768x512.jpg"
+                    class="card-img-top"
+                    alt="Uçansu Şelaleleri"
+                />
+                <div class="card-body">
+                    <h5 class="card-title">Uçansu Şelaleleri</h5>
+                    <button
+                        class="btn"
+                        data-toggle="modal"
+                        data-target="#detailsModal"
+                        onclick="showModal('Uçansu Şelaleleri', 'Uçansu Şelaleleri, Antalya’da bulunan ünlü bir şelaledir.','https://cdnblog.tatilbudur.com/wp-content/uploads/2023/05/2-6-768x512.jpg','https://www.google.com/maps/place//data=!4m2!3m1!1s0x14c489ea04c0e4f5:0x829fd8fe9fd711d8?sa=X&ved=1t:8290&ictx=111')"
+                    >
+                        Detay
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+              <img
+                  src="https://cdnblog.tatilbudur.com/wp-content/uploads/2023/05/2-10-768x534.jpg"
+                  class="card-img-top"
+                  alt="Saklıkent Kanyonu"
+              />
+              <div class="card-body">
+                  <h5 class="card-title">Saklıkent Kanyonu</h5>
+                  <button
+                      class="btn"
+                      data-toggle="modal"
+                      data-target="#detailsModal"
+                      onclick="showModal('Saklıkent Kanyonu', 'Saklıkent Kanyonu, Antalya’da bulunan ünlü bir kanyondur.','https://cdnblog.tatilbudur.com/wp-content/uploads/2023/05/2-10-768x534.jpg','https://www.google.com.tr/maps/place/Sakl%C4%B1kent+Milli+Park%C4%B1/@36.4740165,29.3997234,17z/data=!4m10!1m2!2m1!1ssakl%C4%B1kent+kanyonu+antalya!3m6!1s0x14c04aa8d2b88d5f:0x73cd5e161507819d!8m2!3d36.4737581!4d29.403431!15sChpzYWtsxLFrZW50IGthbnlvbnUgYW50YWx5YVocIhpzYWtsxLFrZW50IGthbnlvbnUgYW50YWx5YZIBDW5hdGlvbmFsX3BhcmuaASRDaGREU1VoTk1HOW5TMFZKUTBGblNVUkVaelpMVFRaM1JSQULgAQA!16s%2Fg%2F11bc5m0rmz?hl=tr&entry=ttu')"
+                  >
+                      Detay
+                  </button>
+              </div>
+          </div>
+      </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="detailsModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="detailsModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <img src="" id="modalImage" class="modal-img" alt="Modal Image" />
+            <div class="modal-text">
+              <h5 class="modal-title" id="modalTitle"></h5>
+              <p id="modalDescription"></p>
+              <div class="d-flex justify-content-around mt-6">
+                <a href="" id="modalLink" target="_blank">
+                  <i class="fa-solid fa-map-location-dot fa-2xl icon-color"></i>
+                </a>
+                <button class="btn-modal" onclick="addToList()">
+                  Listeye Ekle
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <img src="" id="modalImage" class="modal-img" alt="Modal Image" />
+            <div class="modal-text">
+              <h5 class="modal-title" id="modalTitle"></h5>
+              <p id="modalDescription"></p>
+              <div class="d-flex justify-content-around mt-6">
+                <a href="" id="modalLink" target="_blank">
+                  <i class="fa-solid fa-map-location-dot fa-2xl icon-color"></i>
+                </a>
+                <button class="btn-modal" onclick="addToList()">
+                  Listeye Ekle
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- To-Do List -->
+    <div class="todo-list-container w-50 m-auto">
+      <div class="mt-5">
+        <h1>Gezilecek Yerler</h1>
+        <table class="table">
+          <thead>
+            <tr class="table-color">
+              <th scope="col">İsim</th>
+              <th scope="col">Konum</th>
+              <th scope="col">Sil</th>
+            </tr>
+          </thead>
+          <tbody id="todoList">
+            <!-- Items will be added here dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p></p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      function scrollToContent() {
+        document
+          .querySelector(".intro-section")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+      function showCategory(categoryId) {
+        document
+          .querySelectorAll(".card-container")
+          .forEach(function (container) {
+            container.classList.remove("show");
+            container.style.display = "none";
+          });
+        const categoryElement = document.getElementById(categoryId);
+        categoryElement.style.display = "block";
+        setTimeout(function () {
+          categoryElement.classList.add("show");
+        }, 10); // Adding a slight delay for the transition to apply
+      }
+
+      function showModal(title, description, imageUrl, link) {
+        document.getElementById("modalTitle").innerText = title;
+        document.getElementById("modalDescription").innerText = description;
+        document.getElementById("modalImage").src = imageUrl;
+        document.getElementById("modalLink").href = link;
+        $("#detailsModal").modal("show");
+      }
+
+      function addToList() {
+        const title = document.getElementById("modalTitle").innerText;
+        const link = document.getElementById("modalLink").href;
+        const todoList = document.getElementById("todoList");
+
+        // Check if the item already exists
+        if (
+          !Array.from(todoList.children).some(
+            (item) => item.dataset.title === title
+          )
+        ) {
+          const item = document.createElement("tr");
+          item.dataset.title = title;
+
+          item.innerHTML = `
+            <td class="name-sp">${title}</td>
+            <td>
+                <a href="${link}" target="_blank">
+                    <i class="fa-solid fa-map-location-dot fa-2xl"></i>
+                </a>
+            </td>
+            <td>
+                <button class="btn btn-danger btn-sm" onclick="removeFromList(this)">Sil</button>
+            </td>
+        `;
+
+          todoList.appendChild(item);
+        }
+      }
+
+      function removeFromList(button) {
+        const row = button.closest("tr");
+        row.remove();
+      }
+    </script>
+  </body>
+</html>
